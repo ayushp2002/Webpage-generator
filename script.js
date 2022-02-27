@@ -1,3 +1,5 @@
+const ELEMENT_LIST_NAME_SLICE_LEN = 30;
+
 const tagStart = "<html>\n<head>\n";
 const tagBody = "</head>\n<body>\n";
 const tagEnd = "\n</body>\n</html>";
@@ -13,6 +15,17 @@ $(document).ready(function () {
     $("#btnLockCodeEdit").on("click", toggleCodeLock);
     $("#btnAddP").on("click", addP);
     $("#btnAddH").on("click", addH);
+    $(".elementlist").on("click", function () {
+        if ($("input[type='radio']:checked").val() != undefined) {
+            let captionString = "Delete ";
+            captionString += $("label[for='" + $("input[type='radio']:checked").val() + "'] span.elemType").html() + " ";
+            captionString += $("label[for='" + $("input[type='radio']:checked").val() + "'] span.elemText").html().slice(0, 10) + "...";
+            $("#btnDeleteElement").html(captionString);
+        }
+    });
+    // $("#btnSelectedRadio").on("click", function() {
+    //     alert($("input[type='radio']:checked").val());
+    // });
 });
 
 function generateCode() {
@@ -49,6 +62,9 @@ function updateTypedCode() {
     body = $("#code").val().split('<body>\n').pop().split('\n</body>')[0];
     generateCode();
 }
+function genRandomId() {
+    return '_' + Math.random().toString(36).slice(2, 9);
+}
 
 function toggleCodeLock(event) {
     if ($("#code").attr("disabled")) {
@@ -65,21 +81,24 @@ function setTitle(event) {
     generateCode();
 }
 function addP(event) {
-    body += "\n<p>" + $("#txtP").val() + "</p>";
+    let id = genRandomId();
+    body += '\n<p id="' + id + '">' + $("#txtP").val() + "</p>";
     generateCode();
-    addRadiobtn("Paragraph: " + $("#txtP").val());
+    addRadiobtn("Paragraph", $("#txtP").val(), id);
 }
 function addH(event) {
-    body += "\n<h" + $("#comboHSize").val() + ">" + $("#txtH").val() + "</h" + $("#comboHSize").val() + ">";
+    let id = genRandomId();
+    body += '\n<h' + $("#comboHSize").val() + ' id="' + id + '">' + $("#txtH").val() + "</h" + $("#comboHSize").val() + ">";
     generateCode();
-    addRadiobtn("Heading" + $("#comboHSize").val() + ": " + $("#txtH").val());
+    addRadiobtn("Heading " + $("#comboHSize").val(), $("#txtH").val(), id);
 }
-function addRadiobtn(text) {
-    let elementstring = "<input type=\"radio\" name=\"element\">" + text.slice(0, 40);
-    if (text.length > 40) {
-        elementstring += "...<br>";
-    } else {
-        elementstring += "<br>";
+function addRadiobtn(type, text, uid) {
+    let elementstring = '<input type="radio" name="radioElement" value="' + uid +
+                        '" id="' + uid + '"><label for="' + uid + '"><span class="elemType">' 
+                        + type + '</span> <span class="elemText">' + text.slice(0, ELEMENT_LIST_NAME_SLICE_LEN);
+    if (text.length > ELEMENT_LIST_NAME_SLICE_LEN) {
+        elementstring += "...";
     }
+    elementstring += '</span> <span class="elemID">UID: ' + uid + "</span></label><br>";
     $(".elementlist").append(elementstring);
 }
