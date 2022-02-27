@@ -1,7 +1,7 @@
 const ELEMENT_LIST_NAME_SLICE_LEN = 30;
 
 const tagStart = "<html>\n<head>\n";
-const tagBody = "</head>\n<body>\n";
+const tagBody = "</head>\n<body>";
 const tagEnd = "\n</body>\n</html>";
 
 let head = "";
