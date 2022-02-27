@@ -1,0 +1,22 @@
+/* body {
+    display: flex;
+    flex-direction: column;
+} */
+* {
+    margin: 2px;
+}
+.playarea {
+    display: flex;
+}
+.codeview {
+    display: inline;
+}
+.elementlist {
+    height: 35vh;
+    overflow-y: scroll;
+    border: solid 1px black;
+}
+#playbox {
+    display: inline;
+    border: solid 1px black;
+}

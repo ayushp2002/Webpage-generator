@@ -9,8 +9,31 @@
     <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
     <script src="./script.js"></script>
 
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <button id="btnSetTitle">Set Title</button>
+    <button id="btnLockCodeEdit">Unlock Code Editing</button><br>
+    <input type="text" id="txtTitle" placeholder="Title Text"><button id="btnSetTitle">Set Title</button><br>
+    <input type="text" id="txtP" placeholder="Paragraph Text"><button id="btnAddP">Add Paragraph</button><br>
+
+    <input type="text" id="txtH" placeholder="Heading Text">
+    <select name="headingSize" id="comboHSize">
+        <option value="1">Heading 1</option>
+        <option value="2">Heading 2</option>
+        <option value="3">Heading 3</option>
+        <option value="4">Heading 4</option>
+        <option value="5">Heading 5</option>
+        <option value="6">Heading 6</option>
+    </select>
+    <button id="btnAddH">Add Heading</button><br>
+    
+    <div class="playarea">
+        <div class="codeview">
+            <h2>List of elements</h2>
+            <div class="elementlist"></div>
+            <textarea rows="15" cols="70" id="code" placeholder="Your code here" disabled></textarea>
+        </div>
+        <iframe id="playbox" height="500" width="470"></iframe>
+    </div>
 </body>
 </html>
