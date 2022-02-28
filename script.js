@@ -1,5 +1,11 @@
 const ELEMENT_LIST_NAME_SLICE_LEN = 30;
 
+const DEL_ELEM_BTN_TEXT = "Delete Selected Element";
+const IFRAME_ERROR_TEXT = "Live view not supported by current browser";
+const CODE_LOCK_BTN_TEXT = "Lock Code Editing";
+const CODE_UNLOCK_BTN_TEXT = "Unlock Code Editing";
+const NO_DELETE_ELEM_ERROR_TEXT = "No element to delete";
+
 const tagStart = "<html>\n<head>\n";
 const tagBody = "</head>\n<body>";
 const tagEnd = "</body>\n</html>";
@@ -10,6 +16,9 @@ let body = "\n";
 let code = "";
 
 $(document).ready(function () {
+    Split(['.elemlistcontainer', '.codetextcontainer', '.outputcontainer'], {gutterSize: 7,}).setSizes([20, 40, 40]);
+    Split(['.menubar', '.playarea'], {direction: 'vertical', gutterSize: 7,}).setSizes([15,85]);
+
     $("#code").on("keyup", updateTypedCode);
     $("#btnSetTitle").on("click", setTitle);
     $("#btnLockCodeEdit").on("click", toggleCodeLock);
@@ -23,10 +32,10 @@ function generateCode() {
     if (body[body.length - 1] != '\n') body += '\n';
     code = tagStart + title + head + tagBody + body + tagEnd;
     $("#code").val(code);
-    $("#charCount").html(code.length);
+    $("#charCount").html(code.length + " Characters");
 
     //step 1: get the DOM object of the iframe.
-    var iframe = $('iframe#playbox').get(0);
+    var iframe = $('iframe#output').get(0);
 
     // step 2: obtain the document associated with the iframe tag
     // most of the browser supports .document. 
@@ -47,7 +56,7 @@ function generateCode() {
     } else {
         //just in case of browsers that don't support the above 3 properties.
         //fortunately we don't come across such case so far.
-        alert('Live view not supported by current browser');
+        alert(IFRAME_ERROR_TEXT);
     }
 }
 function updateTypedCode() {
@@ -62,10 +71,10 @@ function genRandomId() {
 function toggleCodeLock(event) {
     if ($("#code").attr("disabled")) {
         $("#code").removeAttr("disabled");
-        $("#btnLockCodeEdit").html("Lock Code Editing");
+        $("#btnLockCodeEdit").html(CODE_LOCK_BTN_TEXT);
     } else {
         $("#code").attr("disabled", "disabled");
-        $("#btnLockCodeEdit").html("Unlock Code Editing");
+        $("#btnLockCodeEdit").html(CODE_UNLOCK_BTN_TEXT);
     }
 }
 
@@ -98,28 +107,34 @@ function handleDeletion(event) {
     let selectedElemID = $("input[type='radio']:checked").val();
     let i, j;
     // search for the line of code with the selected element ID
-    for (i = body.indexOf(selectedElemID); body[i] != '\n'; i--);
-    for (j = i+1; body[j] != '\n'; j++);
-    body = body.replace(body.slice(i, j), '');
-    generateCode();
-    delRadiobtn(selectedElemID);
+    if (selectedElemID != undefined) {
+        for (i = body.indexOf(selectedElemID); body[i] != '\n'; i--);
+        for (j = i + 1; body[j] != '\n'; j++);
+        body = body.replace(body.slice(i, j), '');
+        generateCode();
+        delRadiobtn(selectedElemID);
+        $("#btnDeleteElement").html(DEL_ELEM_BTN_TEXT);
+    } else {
+        alert(NO_DELETE_ELEM_ERROR_TEXT);
+    }
 }
 
 function addRadiobtn(type, text, uid) {
     if ($(".elementlist").html[$(".elementlist").html.length - 1] != '\n') $(".elementlist").append('\n');
     let elementstring = '<input type="radio" name="radioElement" value="' + uid +
-                        '" id="' + uid + '"><label for="' + uid + '"><span class="elemType">' 
-                        + type + '</span> <span class="elemText">' + text.slice(0, ELEMENT_LIST_NAME_SLICE_LEN);
+        '" id="' + uid + '"><label for="' + uid + '"><span class="elemType">' + type +
+        '</span> <span class="elemID">UID: ' + uid +
+        '</span><br><span class="elemText">' + text.slice(0, ELEMENT_LIST_NAME_SLICE_LEN);
     if (text.length > ELEMENT_LIST_NAME_SLICE_LEN) {
         elementstring += "...";
     }
-    elementstring += '</span> <span class="elemID">UID: ' + uid + "</span></label><br>\n";
+    elementstring += '</label><br>\n';
     $(".elementlist").append(elementstring);
 }
 function delRadiobtn(uid) {
     let i, j;
     let list = $(".elementlist").html();
     for (i = list.indexOf(uid); list[i] != '\n'; i--);
-    for (j = i+1; list[j] != '\n'; j++);
+    for (j = i + 1; list[j] != '\n'; j++);
     $(".elementlist").html(list.replace(list.slice(i, j), ''));
 }

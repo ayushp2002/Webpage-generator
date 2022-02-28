@@ -1,24 +1,64 @@
-/* body {
+body {
     display: flex;
     flex-direction: column;
-} */
-* {
-    margin: 2px;
+    height: 95vh;
+    margin: 5px;
+    border: solid 7px #eee;
+}
+.gutter {
+    background-color: #eee;
+    background-repeat: no-repeat;
+    background-position: 50%;
+}
+.gutter.gutter-horizontal {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
+    cursor: col-resize;
+}
+.gutter.gutter-vertical {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');
+    cursor: row-resize;
+}
+.menubar {
+    margin-bottom: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.menubar .mbrow {
+
 }
 .playarea {
     display: flex;
+    justify-content: space-around;
 }
-.codeview {
-    display: inline;
+.playareapanel {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    padding: 5px;
+}
+.panelheading {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
 }
 .elementlist {
-    height: 35vh;
-    overflow-y: scroll;
+    width: auto;
+    height: 100%;
     border: solid 1px black;
+    overflow: scroll;
 }
-#playbox {
-    display: inline;
+textarea {
+    width: auto;
+    height: 100%;
+    overflow: scroll;
+}
+#output {
     border: solid 1px black;
+    width: auto;
+    height: 100%;
+    overflow: scroll;
 }
 .elemID {
     color: #888888;
