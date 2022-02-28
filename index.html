@@ -13,17 +13,26 @@
     <script src="./script.js"></script>
 
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    
 </head>
 
 <body>
     <div class="menubar">
         <div class="mbrow mbrow1">
             <button id="btnLockCodeEdit">Unlock Code Editing</button>
+            <span class="controlSetTitle">
+                <input type="text" id="txtTitle" placeholder="Title Text">
+                <button id="btnSetTitle">Set Title</button>
+            </span>
         </div>
         <div class="mbrow mbrow2">
-            <input type="text" id="txtTitle" placeholder="Title Text"><button id="btnSetTitle">Set Title</button>
-            <input type="text" id="txtP" placeholder="Paragraph Text"><button id="btnAddP">Add Paragraph</button>
-            <input type="text" id="txtH" placeholder="Heading Text">
+            <span class="controlAddP">
+                <input type="text" id="txtP" placeholder="Paragraph Text">
+                <button id="btnAddP">Add Paragraph</button>
+            </span>
+            <span class="controlAddH">
+                <input type="text" id="txtH" placeholder="Heading Text">
             <select name="headingSize" id="comboHSize">
                 <option value="1">Heading 1</option>
                 <option value="2">Heading 2</option>
@@ -33,6 +42,7 @@
                 <option value="6">Heading 6</option>
             </select>
             <button id="btnAddH">Add Heading</button>
+            </span>
         </div>
         <div class="mbrow mbrow3">
             <button id="btnDeleteElement">Delete Selected Element</button>

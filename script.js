@@ -122,11 +122,14 @@ function handleDeletion(event) {
 function addRadiobtn(type, text, uid) {
     if ($(".elementlist").html[$(".elementlist").html.length - 1] != '\n') $(".elementlist").append('\n');
     let elementstring = '<input type="radio" name="radioElement" value="' + uid +
-        '" id="' + uid + '"><label for="' + uid + '"><span class="elemType">' + type +
+        '" id="' + uid + '"><label for="' + uid + '"><span class="elemType"> ' + type +
         '</span> <span class="elemID">UID: ' + uid +
-        '</span><br><span class="elemText">' + text.slice(0, ELEMENT_LIST_NAME_SLICE_LEN);
-    if (text.length > ELEMENT_LIST_NAME_SLICE_LEN) {
-        elementstring += "...";
+        '</span>';
+    if (text.length > 0) {
+        elementstring += '<br><span class="elemText">' + text.slice(0, ELEMENT_LIST_NAME_SLICE_LEN);
+        if (text.length > ELEMENT_LIST_NAME_SLICE_LEN) {
+            elementstring += "...";
+        }
     }
     elementstring += '</label><br>\n';
     $(".elementlist").append(elementstring);

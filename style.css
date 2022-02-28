@@ -25,7 +25,8 @@ body {
     justify-content: space-around;
 }
 .menubar .mbrow {
-
+    display: flex;
+    justify-content: space-around;
 }
 .playarea {
     display: flex;
@@ -48,6 +49,9 @@ body {
     height: 100%;
     border: solid 1px black;
     overflow: scroll;
+}
+.elementlist label {
+    font-size: 14px;
 }
 textarea {
     width: auto;
