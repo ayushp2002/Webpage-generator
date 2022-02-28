@@ -2,11 +2,11 @@ const ELEMENT_LIST_NAME_SLICE_LEN = 30;
 
 const tagStart = "<html>\n<head>\n";
 const tagBody = "</head>\n<body>";
-const tagEnd = "\n</body>\n</html>";
+const tagEnd = "</body>\n</html>";
 
 let head = "";
 let title = "";
-let body = "";
+let body = "\n";
 let code = "";
 
 $(document).ready(function () {
@@ -15,22 +15,15 @@ $(document).ready(function () {
     $("#btnLockCodeEdit").on("click", toggleCodeLock);
     $("#btnAddP").on("click", addP);
     $("#btnAddH").on("click", addH);
-    $(".elementlist").on("click", function () {
-        if ($("input[type='radio']:checked").val() != undefined) {
-            let captionString = "Delete ";
-            captionString += $("label[for='" + $("input[type='radio']:checked").val() + "'] span.elemType").html() + " ";
-            captionString += $("label[for='" + $("input[type='radio']:checked").val() + "'] span.elemText").html().slice(0, 10) + "...";
-            $("#btnDeleteElement").html(captionString);
-        }
-    });
-    // $("#btnSelectedRadio").on("click", function() {
-    //     alert($("input[type='radio']:checked").val());
-    // });
+    $(".elementlist").on("click", handleRadioSelect);
+    $("#btnDeleteElement").on("click", handleDeletion);
 });
 
 function generateCode() {
+    if (body[body.length - 1] != '\n') body += '\n';
     code = tagStart + title + head + tagBody + body + tagEnd;
     $("#code").val(code);
+    $("#charCount").html(code.length);
 
     //step 1: get the DOM object of the iframe.
     var iframe = $('iframe#playbox').get(0);
@@ -82,23 +75,51 @@ function setTitle(event) {
 }
 function addP(event) {
     let id = genRandomId();
-    body += '\n<p id="' + id + '">' + $("#txtP").val() + "</p>";
+    body += '<p id="' + id + '">' + $("#txtP").val() + "</p>";
     generateCode();
     addRadiobtn("Paragraph", $("#txtP").val(), id);
 }
 function addH(event) {
     let id = genRandomId();
-    body += '\n<h' + $("#comboHSize").val() + ' id="' + id + '">' + $("#txtH").val() + "</h" + $("#comboHSize").val() + ">";
+    body += '<h' + $("#comboHSize").val() + ' id="' + id + '">' + $("#txtH").val() + "</h" + $("#comboHSize").val() + ">";
     generateCode();
     addRadiobtn("Heading " + $("#comboHSize").val(), $("#txtH").val(), id);
 }
+function handleRadioSelect(event) {
+    let selectedElemID = $("input[type='radio']:checked").val();
+    if (selectedElemID != undefined) {
+        let captionString = "Delete ";
+        captionString += $("label[for='" + selectedElemID + "'] span.elemType").html() + " ";
+        captionString += $("label[for='" + selectedElemID + "'] span.elemText").html().slice(0, 10) + "...";
+        $("#btnDeleteElement").html(captionString);
+    }
+}
+function handleDeletion(event) {
+    let selectedElemID = $("input[type='radio']:checked").val();
+    let i, j;
+    // search for the line of code with the selected element ID
+    for (i = body.indexOf(selectedElemID); body[i] != '\n'; i--);
+    for (j = i+1; body[j] != '\n'; j++);
+    body = body.replace(body.slice(i, j), '');
+    generateCode();
+    delRadiobtn(selectedElemID);
+}
+
 function addRadiobtn(type, text, uid) {
+    if ($(".elementlist").html[$(".elementlist").html.length - 1] != '\n') $(".elementlist").append('\n');
     let elementstring = '<input type="radio" name="radioElement" value="' + uid +
                         '" id="' + uid + '"><label for="' + uid + '"><span class="elemType">' 
                         + type + '</span> <span class="elemText">' + text.slice(0, ELEMENT_LIST_NAME_SLICE_LEN);
     if (text.length > ELEMENT_LIST_NAME_SLICE_LEN) {
         elementstring += "...";
     }
-    elementstring += '</span> <span class="elemID">UID: ' + uid + "</span></label><br>";
+    elementstring += '</span> <span class="elemID">UID: ' + uid + "</span></label><br>\n";
     $(".elementlist").append(elementstring);
+}
+function delRadiobtn(uid) {
+    let i, j;
+    let list = $(".elementlist").html();
+    for (i = list.indexOf(uid); list[i] != '\n'; i--);
+    for (j = i+1; list[j] != '\n'; j++);
+    $(".elementlist").html(list.replace(list.slice(i, j), ''));
 }
