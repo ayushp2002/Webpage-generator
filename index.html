@@ -13,8 +13,7 @@
     <script src="./script.js"></script>
 
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-    
+
 </head>
 
 <body>
@@ -33,19 +32,23 @@
             </span>
             <span class="controlAddH">
                 <input type="text" id="txtH" placeholder="Heading Text">
-            <select name="headingSize" id="comboHSize">
-                <option value="1">Heading 1</option>
-                <option value="2">Heading 2</option>
-                <option value="3">Heading 3</option>
-                <option value="4">Heading 4</option>
-                <option value="5">Heading 5</option>
-                <option value="6">Heading 6</option>
-            </select>
-            <button id="btnAddH">Add Heading</button>
+                <select name="headingSize" id="comboHSize">
+                    <option value="1">Heading 1</option>
+                    <option value="2">Heading 2</option>
+                    <option value="3">Heading 3</option>
+                    <option value="4">Heading 4</option>
+                    <option value="5">Heading 5</option>
+                    <option value="6">Heading 6</option>
+                </select>
+                <button id="btnAddH">Add Heading</button>
             </span>
         </div>
         <div class="mbrow mbrow3">
             <button id="btnDeleteElement">Delete Selected Element</button>
+            <span class="controlChangeText">
+                <input type="text" id="txtChangeText" placeholder="New Text">
+                <button id="btnChangeText">Change Text</button>
+            </span>
         </div>
     </div>
 
@@ -70,6 +73,7 @@
             <iframe id="output"></iframe>
         </div>
     </div>
+    <!-- <div class="shadowContent"></div> -->
 </body>
 
 </html>

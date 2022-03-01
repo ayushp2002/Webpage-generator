@@ -4,6 +4,7 @@ body {
     height: 95vh;
     margin: 5px;
     border: solid 7px #eee;
+    font-family: sans-serif;
 }
 .gutter {
     background-color: #eee;
@@ -70,4 +71,7 @@ textarea {
 }
 .elemType {
     font-weight: bold;
+}
+.shadowContent {
+    display: none;
 }
