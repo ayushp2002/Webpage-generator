@@ -44,11 +44,18 @@ $(document).ready(function () {
     $("#btnChangeText").on("click", changeText);
     $("#comboFontSize").on("change", () => {
         addCssProp($("input[type='radio']:checked").val(),
-            "font-size", $("#comboFontSize").val() + $("#comboFontUnit").val())
+            "font-size",
+            $("#comboFontSize").val() + $("#comboFontUnit").val())
     });
     $("#comboFontUnit").on("change", () => {
         addCssProp($("input[type='radio']:checked").val(),
-            "font-size", $("#comboFontSize").val() + $("#comboFontUnit").val())
+            "font-size",
+            $("#comboFontSize").val() + $("#comboFontUnit").val())
+    });
+    $("#inputFontColor").on("change", () => {
+        addCssProp($("input[type='radio']:checked").val(),
+        "color",
+        $("#inputFontColor").val());
     });
 });
 
@@ -153,15 +160,23 @@ function delRadiobtn(uid) {
 }
 function addCssProp(elemID, propertyName, propertyValue) {
     if (elemID != undefined) {
+        let elemPos = style.indexOf(elemID);
         // Check if style for the element has already been initialized
-        if (style.indexOf(elemID) == -1) { // New style has to be generated
+        if (elemPos == -1) { // New style has to be generated
             style += "\n#" + elemID + " {\n" + propertyName + ": " + propertyValue + ";\n}";
-        } else { // existing style needs to changed
+        } else { // existing style ruleset needs to changed
             // search the property name inside the specific ruleset of the element
-            let startPos = style.indexOf(propertyName, style.indexOf(elemID)) + propertyName.length + 2;
-            let i;
-            for (i = startPos; style[i] != '\n'; i++);
-            style = style.replace(style.slice(startPos, i - 1), propertyValue);
+            let startPos = style.indexOf(propertyName, elemPos) == -1 ? -1 : 
+            (style.indexOf(propertyName, elemPos) + propertyName.length + 2);
+            if (startPos == -1) { // if we need to define a new property
+                style = style.slice(0, elemPos + elemID.length + 2)
+                + "\n" + propertyName + ": " + propertyValue + ";\n"
+                + style.slice(elemPos + elemID.length + 3);
+            } else { // if the property is already defined
+                let i;
+                for (i = startPos; style[i] != '\n'; i++);
+                style = style.replace(style.slice(startPos, i - 1), propertyValue);
+            }
         }
         generateCode();
     } else {
