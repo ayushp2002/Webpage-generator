@@ -53,6 +53,7 @@ body {
 }
 .elementlist label {
     font-size: 14px;
+    font-weight: 300;
 }
 textarea {
     width: auto;
@@ -77,4 +78,8 @@ textarea {
 } */
 #txtFontSize {
     width: 75px;
+}
+label {
+    font-size: 13px;
+    font-weight: 600;
 }
