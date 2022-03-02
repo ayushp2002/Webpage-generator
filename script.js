@@ -6,8 +6,7 @@ const DEL_ELEM_BTN_TEXT = "Delete Selected Element";
 const IFRAME_ERROR_TEXT = "Live view not supported by current browser";
 const CODE_LOCK_BTN_TEXT = "Lock Code Editing";
 const CODE_UNLOCK_BTN_TEXT = "Unlock Code Editing";
-const NO_DELETE_ELEM_ERROR_TEXT = "No element to delete";
-const NO_TEXT_CHANGE_ELEM_ERROR_TEXT = "No element to change text";
+const NO_SELECTED_ELEMENT_ERROR_TEXT = "No element selected for change";
 
 /** HTML Tags to be used while generation */
 const tagStart = "<html>\n<head>\n";
@@ -16,6 +15,7 @@ const tagEnd = "</body>\n</html>";
 
 /** Global Variables */
 let head = "";
+let style = "";
 let title = "";
 let body = "\n";
 let code = "";
@@ -24,10 +24,14 @@ let iframedoc;
 /** Initialization */
 $(document).ready(function () {
     /* Split the screen in two verticals and 3 horizontals */
-    Split(['.elemlistcontainer', '.codetextcontainer', '.outputcontainer'], {gutterSize: 7,}).setSizes([20, 40, 40]);
-    Split(['.menubar', '.playarea'], {direction: 'vertical', gutterSize: 7,}).setSizes([15,85]);
+    Split(['.elemlistcontainer', '.codetextcontainer', '.outputcontainer'], { gutterSize: 7, }).setSizes([20, 40, 40]);
+    Split(['.menubar', '.playarea'], { direction: 'vertical', gutterSize: 7, }).setSizes([15, 85]);
 
     iframedoc = getIframedocInstance();
+
+    for (let i = 2; i <= 100; i += 2) {
+        $("#comboFontSize").append('<option value="' + i + '">' + i + '</option>');
+    }
 
     /* Declare the event handlers */
     $("#code").on("keyup", updateTypedCode);
@@ -38,6 +42,14 @@ $(document).ready(function () {
     $(".elementlist").on("click", handleRadioSelect);
     $("#btnDeleteElement").on("click", handleDeletion);
     $("#btnChangeText").on("click", changeText);
+    $("#comboFontSize").on("change", () => {
+        addCssProp($("input[type='radio']:checked").val(),
+            "font-size", $("#comboFontSize").val() + $("#comboFontUnit").val())
+    });
+    $("#comboFontUnit").on("change", () => {
+        addCssProp($("input[type='radio']:checked").val(),
+            "font-size", $("#comboFontSize").val() + $("#comboFontUnit").val())
+    });
 });
 
 /** Utility functions */
@@ -49,17 +61,18 @@ function generateCode() {
     not, then we add a newline character to the end of the body. This is to ensure that the next
     line in the body will start from a new line. */
     if (body[body.length - 1] != '\n') body += '\n';
+    if (style.length > 0) head = "<style>" + style + "\n</style>\n";
 
     code = tagStart + title + head + tagBody + body + tagEnd;
     $("#code").val(code);
     $("#charCount").html(code.length + " Characters");
 
     $("#btnDeleteElement").html(DEL_ELEM_BTN_TEXT);
-    
+
     // Put the content in the iframe
-       iframedoc.open();
-       iframedoc.writeln(code);
-       iframedoc.close();    
+    iframedoc.open();
+    iframedoc.writeln(code);
+    iframedoc.close();
 }
 /**
  * It takes the text in the textarea and puts it into the code variable
@@ -138,6 +151,23 @@ function delRadiobtn(uid) {
     for (j = i + 1; list[j] != '\n'; j++);
     $(".elementlist").html(list.replace(list.slice(i, j), ''));
 }
+function addCssProp(elemID, propertyName, propertyValue) {
+    if (elemID != undefined) {
+        // Check if style for the element has already been initialized
+        if (style.indexOf(elemID) == -1) { // New style has to be generated
+            style += "\n#" + elemID + " {\n" + propertyName + ": " + propertyValue + ";\n}";
+        } else { // existing style needs to changed
+            // search the property name inside the specific ruleset of the element
+            let startPos = style.indexOf(propertyName, style.indexOf(elemID)) + propertyName.length + 2;
+            let i;
+            for (i = startPos; style[i] != '\n'; i++);
+            style = style.replace(style.slice(startPos, i - 1), propertyValue);
+        }
+        generateCode();
+    } else {
+        alert(NO_SELECTED_ELEMENT_ERROR_TEXT);
+    }
+}
 
 /** Event handler functions */
 /**
@@ -159,7 +189,7 @@ function toggleCodeLock(event) {
  * @param event - The event object that was passed to the function.
  */
 function setTitle(event) {
-    title = "<title>" + $("#txtTitle").val() + "</title>\n";
+    title = "<title>" + $("#txtCommon").val() + "</title>\n";
     generateCode();
 }
 /**
@@ -168,9 +198,9 @@ function setTitle(event) {
  */
 function addP(event) {
     let id = genRandomId();
-    body += '<p id="' + id + '">' + $("#txtP").val() + "</p>";
+    body += '<p id="' + id + '">' + $("#txtCommon").val() + "</p>";
     generateCode();
-    addRadiobtn("Paragraph", $("#txtP").val(), id);
+    addRadiobtn("Paragraph", $("#txtCommon").val(), id);
 }
 /**
  * It generates a random id, adds a heading tag with the id, and adds a radio button with the id and
@@ -179,9 +209,9 @@ function addP(event) {
  */
 function addH(event) {
     let id = genRandomId();
-    body += '<h' + $("#comboHSize").val() + ' id="' + id + '">' + $("#txtH").val() + "</h" + $("#comboHSize").val() + ">";
+    body += '<h' + $("#comboHSize").val() + ' id="' + id + '">' + $("#txtCommon").val() + "</h" + $("#comboHSize").val() + ">";
     generateCode();
-    addRadiobtn("Heading " + $("#comboHSize").val(), $("#txtH").val(), id);
+    addRadiobtn("Heading " + $("#comboHSize").val(), $("#txtCommon").val(), id);
 }
 /**
  * The function is called when a radio button is selected. 
@@ -216,7 +246,7 @@ function handleDeletion(event) {
         generateCode();
         delRadiobtn(selectedElemID);
     } else {
-        alert(NO_DELETE_ELEM_ERROR_TEXT);
+        alert(NO_SELECTED_ELEMENT_ERROR_TEXT);
     }
 }
 function changeText(event) {
@@ -228,11 +258,11 @@ function changeText(event) {
     if (selectedElemID != undefined) {
         for (i = body.indexOf(selectedElemID); body[i] != '>'; i++);
         for (j = i + 1; body[j] != '<'; j++);
-        body = body.replace(body.slice(i+1, j), $("#txtChangeText").val());
+        body = body.replace(body.slice(i + 1, j), $("#txtCommon").val());
         generateCode();
         delRadiobtn(selectedElemID);
-        addRadiobtn(selectedElemType.slice(1), $("#txtChangeText").val(), selectedElemID);
+        addRadiobtn(selectedElemType.slice(1), $("#txtCommon").val(), selectedElemID);
     } else {
-        alert(NO_TEXT_CHANGE_ELEM_ERROR_TEXT);
+        alert(NO_SELECTED_ELEMENT_ERROR_TEXT);
     }
 }

@@ -72,6 +72,9 @@ textarea {
 .elemType {
     font-weight: bold;
 }
-.shadowContent {
+/* .shadowContent {
     display: none;
+} */
+#txtFontSize {
+    width: 75px;
 }

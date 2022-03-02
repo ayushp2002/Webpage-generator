@@ -20,18 +20,19 @@
     <div class="menubar">
         <div class="mbrow mbrow1">
             <button id="btnLockCodeEdit">Unlock Code Editing</button>
-            <span class="controlSetTitle">
-                <input type="text" id="txtTitle" placeholder="Title Text">
-                <button id="btnSetTitle">Set Title</button>
-            </span>
         </div>
         <div class="mbrow mbrow2">
+            <input type="text" id="txtCommon" placeholder="Text">
+            <span class="controlSetTitle">
+                <button id="btnSetTitle">Set Title</button>
+            </span>
+            <span class="controlChangeText">
+                <button id="btnChangeText">Change Text</button>
+            </span>
             <span class="controlAddP">
-                <input type="text" id="txtP" placeholder="Paragraph Text">
                 <button id="btnAddP">Add Paragraph</button>
             </span>
             <span class="controlAddH">
-                <input type="text" id="txtH" placeholder="Heading Text">
                 <select name="headingSize" id="comboHSize">
                     <option value="1">Heading 1</option>
                     <option value="2">Heading 2</option>
@@ -42,13 +43,23 @@
                 </select>
                 <button id="btnAddH">Add Heading</button>
             </span>
+            <span class="controlChangeFontSize">
+                <!-- <input list="comboFontSize" id="txtFontSize" placeholder="Font Size"> -->
+                <!-- <datalist id="comboFontSize"> <!- Will be populated dynamically -> </datalist> -->
+                <!--https://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_datalist_options_length-->
+                <select name="fontSize" id="comboFontSize"> <!-- Will be populated dynamically --> </select>
+                <select name="fontUnit" id="comboFontUnit">
+                    <option value="px">px</option>
+                    <option value="pt">pt</option>
+                    <option value="cm">cm</option>
+                    <option value="%">%</option>
+                    <option value="em">em</option>
+                    <option value="rem">rem</option>
+                </select>
+            </span>
         </div>
         <div class="mbrow mbrow3">
             <button id="btnDeleteElement">Delete Selected Element</button>
-            <span class="controlChangeText">
-                <input type="text" id="txtChangeText" placeholder="New Text">
-                <button id="btnChangeText">Change Text</button>
-            </span>
         </div>
     </div>
 
