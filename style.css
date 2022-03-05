@@ -28,6 +28,7 @@ body {
 .menubar .mbrow {
     display: flex;
     justify-content: space-around;
+    align-items: center;
 }
 .playarea {
     display: flex;
@@ -73,13 +74,17 @@ textarea {
 .elemType {
     font-weight: bold;
 }
-/* .shadowContent {
-    display: none;
-} */
 #txtFontSize {
     width: 75px;
 }
 label {
     font-size: 13px;
     font-weight: 600;
+}
+/* These do not work here so have to add style to the element tag in html */
+/* input#inputFontColor {
+    vertical-align: middle;
+} */
+#comboFontFace {
+    width: 200px;
 }

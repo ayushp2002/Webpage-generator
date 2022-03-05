@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+        <script src="https://apis.google.com/js/api.js"></script>
+        <script src="./config.js"></script>
+        <script src="./fontapi.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100" rel="stylesheet">
+
+    <script async>
+      window.onload = function () {
+        // setTimeout( () => {loadClient();setTimeout( () => {execute();}, 300)}, 300);
+        // setTimeout(() => {execute()}, 500);
+        loadClient().then((value) => execute());
+      };
+    </script>
+
+    <style>
+      body {
+        font-family: 'Roboto';
+      }
+    </style>
+</head>
+<body>
+    <!-- <script src="https://apis.google.com/js/api.js"></script> -->
+<!-- <script>
+
+  function loadClient() {
+    gapi.client.setApiKey(API_KEY);
+    return gapi.client.load("https://www.googleapis.com/discovery/v1/apis/webfonts/v1/rest")
+        .then(function() { console.log("GAPI client loaded for API"); },
+              function(err) { console.error("Error loading GAPI client for API", err); });
+  }
+  // Make sure the client is loaded before calling this method.
+  function execute() {
+    return gapi.client.webfonts.webfonts.list({
+      "sort": "POPULARITY"
+    })
+        .then(function(response) {
+                // Handle the results here (response.result has the parsed body).
+                console.log(response.result);
+                response.result.items.forEach(font => {
+                  // $(".content").append('<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=' + font.family.replaceAll(' ', '+') + '">' + "<br>")
+                  $(".content").append(font.family.replaceAll(' ', '+') + "<br>");
+                });
+              },
+              function(err) { console.error("Execute error", err); });
+  }
+  gapi.load("client");
+</script> -->
+<button onclick="loadClient()">load</button>
+<button onclick="execute()">execute</button>
+<div class="content"></div>
+</body>
+</html>

@@ -10,6 +10,10 @@
     <script src="https://code.jquery.com/jquery-3.6.0.js"
         integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/split.js/1.6.0/split.min.js"></script>
+    <script src="https://apis.google.com/js/api.js"></script>
+    
+    <script src="./config.js"></script>
+    <script src="./fontapi.js"></script>
     <script src="./script.js"></script>
 
     <link rel="stylesheet" href="style.css">
@@ -20,6 +24,7 @@
     <div class="menubar">
         <div class="mbrow mbrow1">
             <button id="btnLockCodeEdit">Unlock Code Editing</button>
+            <button id="btnDeleteElement">Delete Selected Element</button>
         </div>
         <div class="mbrow mbrow2">
             <input type="text" id="txtCommon" placeholder="Text">
@@ -43,6 +48,9 @@
                 </select>
                 <button id="btnAddH">Add Heading</button>
             </span>
+            
+        </div>
+        <div class="mbrow mbrow3">
             <span class="controlChangeFontSize">
                 <!-- <input list="comboFontSize" id="txtFontSize" placeholder="Font Size"> -->
                 <!-- <datalist id="comboFontSize"> <!- Will be populated dynamically -> </datalist> -->
@@ -59,11 +67,15 @@
                 </select>
             </span>
             <span class="controlFontColor">
-                <input type="color" name="fontColor" id="inputFontColor">
+                <label for="fontColor">Font Color</label>
+                <input type="color" name="fontColor" id="inputFontColor" style="vertical-align: middle;">
             </span>
-        </div>
-        <div class="mbrow mbrow3">
-            <button id="btnDeleteElement">Delete Selected Element</button>
+           <span class="controlChangeFontFace">
+                <label for="fontFace">Font Face</label>
+                <select name="fontFace" id="comboFontFace" style="width: 150px;"> <!-- Will be populated dynamically --> </select>
+                <select name="fontFaceWeight" id="comboFontFaceWeight" style="width: 100px;"> <!-- Will be populated dynamically --> </select>
+                <select name="fontFaceSort" id="comboFontFaceSort" style="width: 100px;"> <!-- Will be populated dynamically --> </select>
+           </span>
         </div>
     </div>
 
@@ -87,8 +99,8 @@
             </div>
             <iframe id="output"></iframe>
         </div>
+        <div class="content"></div>
     </div>
-    <!-- <div class="shadowContent"></div> -->
 </body>
 
 </html>

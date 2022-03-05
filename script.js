@@ -1,5 +1,12 @@
 /** Constant values */
 const ELEMENT_LIST_NAME_SLICE_LEN = 30;
+const FONT_SORT_MAP = {
+    "Alphabetical": "alpha",
+    "Most Recent": "date",
+    "Most Popular": "popularity",
+    "Number of Styles": "style",
+    "Trending": "trending"
+};
 
 /** Constant text elements */
 const DEL_ELEM_BTN_TEXT = "Delete Selected Element";
@@ -9,17 +16,19 @@ const CODE_UNLOCK_BTN_TEXT = "Unlock Code Editing";
 const NO_SELECTED_ELEMENT_ERROR_TEXT = "No element selected for change";
 
 /** HTML Tags to be used while generation */
-const tagStart = "<html>\n<head>\n";
+const tagStart = "<html>\n<head>";
 const tagBody = "</head>\n<body>";
 const tagEnd = "</body>\n</html>";
 
 /** Global Variables */
 let head = "";
+let headlinks = "";
 let style = "";
 let title = "";
 let body = "\n";
 let code = "";
 let iframedoc;
+let fonts;// = {};
 
 /** Initialization */
 $(document).ready(function () {
@@ -29,8 +38,23 @@ $(document).ready(function () {
 
     iframedoc = getIframedocInstance();
 
+    // Fill the font size combo box
     for (let i = 2; i <= 100; i += 2) {
         $("#comboFontSize").append('<option value="' + i + '">' + i + '</option>');
+    }
+
+    // Fill the font family sorting combo box
+    Object.keys(FONT_SORT_MAP).forEach(sortKey => {
+        $("#comboFontFaceSort").append(
+            '<option value="' + FONT_SORT_MAP[sortKey] +
+            '">' + sortKey + '</option>\n'
+        );
+    });
+
+    // Fill the font face combo box Google Fonts API for the first time
+    // execute on window load. document ready is too early for loading fonts
+    window.onload = function () {
+        loadGFonts("alpha", () => { fillFontFaceCombo(); fillFontWeightCombo() });
     }
 
     /* Declare the event handlers */
@@ -54,8 +78,19 @@ $(document).ready(function () {
     });
     $("#inputFontColor").on("change", () => {
         addCssProp($("input[type='radio']:checked").val(),
-        "color",
-        $("#inputFontColor").val());
+            "color",
+            $("#inputFontColor").val());
+    });
+    $("#comboFontFaceSort").on("change", () => {
+        loadGFonts($("#comboFontFaceSort").val(), () => { fillFontFaceCombo(); fillFontWeightCombo() });
+    });
+    $("#comboFontFace").on("change", () => {
+        fillFontWeightCombo();
+        addCssProp($("input[type='radio']:checked").val(), "font-family", "'" + $("#comboFontFace option:selected").val() + "'");
+        addFontLink($("#comboFontFace option:selected").val());
+    });
+    $("#comboFontFaceWeight").on("change", () => {
+        addFontLink($("#comboFontFace option:selected").val(), $("#comboFontFaceWeight option:selected").val());
     });
 });
 
@@ -68,7 +103,7 @@ function generateCode() {
     not, then we add a newline character to the end of the body. This is to ensure that the next
     line in the body will start from a new line. */
     if (body[body.length - 1] != '\n') body += '\n';
-    if (style.length > 0) head = "<style>" + style + "\n</style>\n";
+    if (style.length > 0) head = headlinks + "<style>" + style + "\n</style>\n";
 
     code = tagStart + title + head + tagBody + body + tagEnd;
     $("#code").val(code);
@@ -166,12 +201,12 @@ function addCssProp(elemID, propertyName, propertyValue) {
             style += "\n#" + elemID + " {\n" + propertyName + ": " + propertyValue + ";\n}";
         } else { // existing style ruleset needs to changed
             // search the property name inside the specific ruleset of the element
-            let startPos = style.indexOf(propertyName, elemPos) == -1 ? -1 : 
-            (style.indexOf(propertyName, elemPos) + propertyName.length + 2);
+            let startPos = style.indexOf(propertyName, elemPos) == -1 ? -1 :
+                (style.indexOf(propertyName, elemPos) + propertyName.length + 2);
             if (startPos == -1) { // if we need to define a new property
                 style = style.slice(0, elemPos + elemID.length + 2)
-                + "\n" + propertyName + ": " + propertyValue + ";\n"
-                + style.slice(elemPos + elemID.length + 3);
+                    + "\n" + propertyName + ": " + propertyValue + ";\n"
+                    + style.slice(elemPos + elemID.length + 3);
             } else { // if the property is already defined
                 let i;
                 for (i = startPos; style[i] != '\n'; i++);
@@ -182,6 +217,79 @@ function addCssProp(elemID, propertyName, propertyValue) {
     } else {
         alert(NO_SELECTED_ELEMENT_ERROR_TEXT);
     }
+}
+function addFontLink(fontName, weight = "") {
+    if ($("input[type='radio']:checked").val() != undefined) {
+        fontName = fontName.replaceAll(' ', '+');
+        if (weight == 'regular') weight = "";
+        if (weight != "") weight = ":wght@" + weight;
+        let link = '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=' + fontName + weight + '">\n';
+        if (headlinks.length == 0) { //if this is the first link to be added
+            link = '\n' + link;
+        }
+        if (headlinks.indexOf(fontName) == -1) {    // If the link does not already exist, create new
+            headlinks += link;
+        } else {    // if the current font is already imported, overwrite
+            let startpos, endpos;
+            for (startpos = headlinks.indexOf(fontName); headlinks[startpos] != '\n'; startpos--);
+            startpos++;
+            for (endpos = startpos; headlinks[endpos] != '\n'; endpos++);
+            headlinks = headlinks.replace(headlinks.slice(startpos, endpos + 1), link);
+        }
+        // search for the usage of last active font and remove if not used.
+        let lastused = $("#comboFontFace").data("prev");
+        if (lastused != undefined) {
+            pos = style.indexOf(lastused);
+            if (pos == -1) {    // not used
+                for (startpos = headlinks.indexOf(lastused); headlinks[startpos] != '\n'; startpos--);
+                startpos++;
+                for (endpos = startpos; headlinks[endpos] != '\n'; endpos++);
+                headlinks = headlinks.replace(headlinks.slice(startpos, endpos + 1), "");
+            }
+        }
+        generateCode();
+        $("#comboFontFace").data("prev", $().val());
+    }
+}
+function loadGFonts(sort, callback) {
+    // fonts = {};
+    loadGFontsAPIClient()
+        .then(value => {   // Make sure the client is loaded before calling this method.
+            return gapi.client.webfonts.webfonts.list({ "sort": sort })
+                .then(function (response) {
+                    // Handle the results here (response.result has the parsed body).
+                    console.log(response.result);
+                    fonts = response.result.items;
+                }, function (err) { console.error("Execute error", err); });
+        }).then(() => callback());
+}
+function fillFontFaceCombo() {
+    $("#comboFontFace").html("");
+    fonts.forEach((font, index) => { // add font families
+        $("#comboFontFace").append(
+            '<option value="'
+            + font.family
+            + '" id="fontIndex' + index + '">' + font.family + '</option>'
+        );
+    });
+}
+function fillFontWeightCombo() {
+    $("#comboFontFaceWeight").html("");
+    fonts[$("#comboFontFace option:selected").index()].variants.forEach(variant => {  // add the corresponding font weights
+        if (variant.indexOf("italic") == -1) {  // ignore the italics, it makes the logic more complex
+            $("#comboFontFaceWeight").append(
+                '<option value="'
+                + variant
+                + '">' + toTitleCase(variant) + '</option>'
+            );
+        }
+    });
+}
+
+function toTitleCase(str) {
+    return str.replace(/(?:^|\s)\w/g, function (match) {
+        return match.toUpperCase();
+    });
 }
 
 /** Event handler functions */
@@ -204,7 +312,7 @@ function toggleCodeLock(event) {
  * @param event - The event object that was passed to the function.
  */
 function setTitle(event) {
-    title = "<title>" + $("#txtCommon").val() + "</title>\n";
+    title = "\n<title>" + $("#txtCommon").val() + "</title>\n";
     generateCode();
 }
 /**
