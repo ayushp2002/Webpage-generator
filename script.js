@@ -14,6 +14,7 @@ const IFRAME_ERROR_TEXT = "Live view not supported by current browser";
 const CODE_LOCK_BTN_TEXT = "Lock Code Editing";
 const CODE_UNLOCK_BTN_TEXT = "Unlock Code Editing";
 const NO_SELECTED_ELEMENT_ERROR_TEXT = "No element selected for change";
+const NO_TITLE_ERROR_TEXT = "Add title to your webpage to download";
 
 /** HTML Tags to be used while generation */
 const tagStart = "<html>\n<head>";
@@ -28,13 +29,14 @@ let title = "";
 let body = "\n";
 let code = "";
 let iframedoc;
-let fonts;// = {};
+let fonts;
+let usedFonts = [];
 
 /** Initialization */
 $(document).ready(function () {
     /* Split the screen in two verticals and 3 horizontals */
     Split(['.elemlistcontainer', '.codetextcontainer', '.outputcontainer'], { gutterSize: 7, }).setSizes([20, 40, 40]);
-    Split(['.menubar', '.playarea'], { direction: 'vertical', gutterSize: 7, }).setSizes([15, 85]);
+    Split(['.toolbar', '.playarea'], { direction: 'vertical', gutterSize: 7, }).setSizes([15, 85]);
 
     iframedoc = getIframedocInstance();
 
@@ -63,6 +65,7 @@ $(document).ready(function () {
     /* Declare the event handlers */
     $("#code").on("keyup", updateTypedCode);
     $("#btnSetTitle").on("click", setTitle);
+    $("#btnDownloadCode").on("click", downloadCode);
     $("#btnLockCodeEdit").on("click", toggleCodeLock);
     $("#btnAddP").on("click", addP);
     $("#btnAddH").on("click", addH);
@@ -240,18 +243,22 @@ function addFontLink(fontName, weight = "") {
             headlinks = headlinks.replace(headlinks.slice(startpos, endpos + 1), link);
         }
         // search for the usage of last active font and remove if not used.
-        let lastused = $("#comboFontFace").data("prev");
-        if (lastused != undefined) {
-            pos = style.indexOf(lastused);
-            if (pos == -1) {    // not used
-                for (startpos = headlinks.indexOf(lastused); headlinks[startpos] != '\n'; startpos--);
-                startpos++;
-                for (endpos = startpos; headlinks[endpos] != '\n'; endpos++);
-                headlinks = headlinks.replace(headlinks.slice(startpos, endpos + 1), "");
+        usedFonts.forEach((lastused, index) => {
+            if (lastused != undefined) {
+                pos = style.indexOf(lastused);
+                if (pos == -1) {    // not used
+                    for (startpos = headlinks.indexOf(lastused.replace(" ", "+")); headlinks[startpos] != '\n'; startpos--);
+                    startpos++;
+                    for (endpos = startpos; headlinks[endpos] != '\n'; endpos++);
+                    headlinks = headlinks.replace(headlinks.slice(startpos, endpos + 1), "");
+                    usedFonts.splice(index, 1); // remove this unused item from array
+                }
             }
-        }
+        });
         generateCode();
-        $("#comboFontFace").data("prev", $().val());
+        if (usedFonts.indexOf($("#comboFontFace").val()) == -1) {
+            usedFonts.push($("#comboFontFace").val());
+        }
     }
 }
 function loadGFonts(sort, callback) {
@@ -261,7 +268,6 @@ function loadGFonts(sort, callback) {
             return gapi.client.webfonts.webfonts.list({ "sort": sort })
                 .then(function (response) {
                     // Handle the results here (response.result has the parsed body).
-                    console.log(response.result);
                     fonts = response.result.items;
                 }, function (err) { console.error("Execute error", err); });
         }).then(() => callback());
@@ -302,7 +308,16 @@ const parse = (salt, encoded) => {
         .map(applySaltToChar)
         .map((charCode) => String.fromCharCode(charCode))
         .join("");
-  };
+};
+function download(filename, text) {
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    element.setAttribute('download', filename);
+    element.style.display = 'none';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+}
 
 /** Event handler functions */
 /**
@@ -399,5 +414,12 @@ function changeText(event) {
         addRadiobtn(selectedElemType.slice(1), $("#txtCommon").val(), selectedElemID);
     } else {
         alert(NO_SELECTED_ELEMENT_ERROR_TEXT);
+    }
+}
+function downloadCode(event) {
+    if (title != "") {
+        download(title.slice(8, title.length - 9) + ".html", code);
+    } else {
+        alert(NO_TITLE_ERROR_TEXT);
     }
 }

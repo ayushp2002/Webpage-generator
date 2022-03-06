@@ -19,13 +19,13 @@ body {
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');
     cursor: row-resize;
 }
-.menubar {
+.toolbar {
     margin-bottom: 5px;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
 }
-.menubar .mbrow {
+.toolbar .toolbar-row {
     display: flex;
     justify-content: space-around;
     align-items: center;
