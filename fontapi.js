@@ -1,5 +1,7 @@
 async function loadGFontsAPIClient() {
-  gapi.client.setApiKey(API_KEY);
+  let STRING_1 = $("body").data("key");
+  let STRING_2 = $("body").data("salt");
+  gapi.client.setApiKey(parse(STRING_2, STRING_1));
   return gapi.client.load("https://www.googleapis.com/discovery/v1/apis/webfonts/v1/rest")
     .then(function () { /*console.log("GAPI client loaded for API");*/ },
       function (err) { console.error("Error loading GAPI client for API", err); });

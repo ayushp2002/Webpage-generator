@@ -38,6 +38,9 @@ $(document).ready(function () {
 
     iframedoc = getIframedocInstance();
 
+    $("body").data("key", "1a12213a082219302c101e081a031f11381d0b13331f692a2f1d352c693f2c1c341e2f686b346f");
+    $("body").data("salt", 'bf2d2d42e88c265c22ac07f083aab6ed');
+
     // Fill the font size combo box
     for (let i = 2; i <= 100; i += 2) {
         $("#comboFontSize").append('<option value="' + i + '">' + i + '</option>');
@@ -285,12 +288,21 @@ function fillFontWeightCombo() {
         }
     });
 }
-
 function toTitleCase(str) {
     return str.replace(/(?:^|\s)\w/g, function (match) {
         return match.toUpperCase();
     });
 }
+const parse = (salt, encoded) => {
+    const textToChars = (text) => text.split("").map((c) => c.charCodeAt(0));
+    const applySaltToChar = (code) => textToChars(salt).reduce((a, b) => a ^ b, code);
+    return encoded
+        .match(/.{1,2}/g)
+        .map((hex) => parseInt(hex, 16))
+        .map(applySaltToChar)
+        .map((charCode) => String.fromCharCode(charCode))
+        .join("");
+  };
 
 /** Event handler functions */
 /**
