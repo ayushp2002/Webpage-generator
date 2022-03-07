@@ -18,11 +18,29 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="menubar">
+        <div class="menu" id="fileMenu">
+            <span class="menuTitle" id="fileMenuTitle">File</span>
+            <div class="menuItems" id="fileMenuItems">
+                <span class="menuItem" id="menuDownloadCode">Download code</span>
+            </div>
+        </div>
+        <div class="menu" id="editMenu">
+            <span class="menuTitle" id="editMenuTitle">Edit</span>
+            <div class="menuItems" id="editMenuItems">
+                <span class="menuItem" id="menuLockCodeEdit">Unlock Code Editing[inDev DO-NOT-USE]</span>
+            </div>
+        </div>
+        <div class="menu" id="codeMenu">
+            <span class="menuTitle" id="codeMenuTitle">Code</span>
+            <div class="menuItems" id="codeMenuItems">
+                <span class="menuItem" id="menuChangeId">Change ID</span>
+            </div>
+        </div>
+    </div>
     <div class="toolbar">
         <div class="toolbar-row toolbar-row1">
-            <button id="btnLockCodeEdit">Unlock Code Editing [inDev DO-NOT-USE]</button>
             <button id="btnDeleteElement">Delete Selected Element</button>
-            <button id="btnDownloadCode">Download Code</button>
         </div>
         <div class="toolbar-row toolbar-row2">
             <input type="text" id="txtCommon" placeholder="Text">

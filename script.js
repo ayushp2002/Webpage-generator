@@ -11,8 +11,8 @@ const FONT_SORT_MAP = {
 /** Constant text elements */
 const DEL_ELEM_BTN_TEXT = "Delete Selected Element";
 const IFRAME_ERROR_TEXT = "Live view not supported by current browser";
-const CODE_LOCK_BTN_TEXT = "Lock Code Editing";
-const CODE_UNLOCK_BTN_TEXT = "Unlock Code Editing";
+const CODE_LOCK_BTN_TEXT = "Lock Code Editing[inDev DO-NOT-USE]";
+const CODE_UNLOCK_BTN_TEXT = "Unlock Code Editing[inDev DO-NOT-USE]";
 const NO_SELECTED_ELEMENT_ERROR_TEXT = "No element selected for change";
 const NO_TITLE_ERROR_TEXT = "Add title to your webpage to download";
 
@@ -65,8 +65,8 @@ $(document).ready(function () {
     /* Declare the event handlers */
     $("#code").on("keyup", updateTypedCode);
     $("#btnSetTitle").on("click", setTitle);
-    $("#btnDownloadCode").on("click", downloadCode);
-    $("#btnLockCodeEdit").on("click", toggleCodeLock);
+    $("#menuDownloadCode").on("click", downloadCode);
+    $("#menuLockCodeEdit").on("click", toggleCodeLock);
     $("#btnAddP").on("click", addP);
     $("#btnAddH").on("click", addH);
     $(".elementlist").on("click", handleRadioSelect);
@@ -328,10 +328,10 @@ function download(filename, text) {
 function toggleCodeLock(event) {
     if ($("#code").attr("disabled")) {
         $("#code").removeAttr("disabled");
-        $("#btnLockCodeEdit").html(CODE_LOCK_BTN_TEXT);
+        $("#menuLockCodeEdit").html(CODE_LOCK_BTN_TEXT);
     } else {
         $("#code").attr("disabled", "disabled");
-        $("#btnLockCodeEdit").html(CODE_UNLOCK_BTN_TEXT);
+        $("#menuLockCodeEdit").html(CODE_UNLOCK_BTN_TEXT);
     }
 }
 /**
