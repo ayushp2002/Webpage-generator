@@ -22,45 +22,24 @@ body {
     border-top: solid 1px #ccc;
     border-bottom: solid 1px #ccc;
 }
-.menubar {
-    line-height: 20px;
+.tabbar {
+    height: 35px;
     width: 100vw;
     background-color: #eee;
     border-bottom: solid 1px #ccc;
+    display: flex;
+    align-items: center;
 }
-.menu {
-    display: inline;
-}
-.menuTitle {
+.tabTitle {
     margin-left: 15px;
-    font-size: 14px;
-    padding: 2px 5px;
+    font-size: 16px;
+    padding: 8px 10px;
 }
-.menuItems {
-    display: none;
-    position: absolute;
-    box-shadow: 0px 5px 10px 0px rgba(0,0,0,0.2);
+.tabTitle:hover {
     background-color: #ddd;
-    width: fit-content;
-    line-height: 20px;
-    z-index: 1;
-    margin-left: 20px;
-    padding: 5px 0px;
 }
-.menuItem {
-    font-size: 14px;
-    padding: 3px 10px;
-    width: 100%;
-
-}
-.menuItem:hover {
+.tabActive {
     background-color: #ccc;
-}
-.menuTitle:hover {
-    background-color: #ccc;
-}
-.menu:hover .menuItems {
-    display: block;
 }
 .toolbar {
     display: flex;
@@ -68,10 +47,28 @@ body {
     justify-content: space-around;
     border: solid 7px #eee;
 }
+.toolbarActive {
+    display: flex !important;
+}
 .toolbar .toolbar-row {
-    display: flex;
-    justify-content: space-around;
+    display: none;
+    justify-content: flex-start;
+    padding: 5px 10px;
     align-items: center;
+}
+.toolbar .control {
+    margin-right: 20px;
+    border: solid 1px #aaa;
+    padding: 5px;
+    border-radius: 8px;
+}
+.toolbar .control * {
+    border-radius: 6px;
+    border: solid 1px;
+    padding: 3px;
+}
+.toolbar .control label {
+    border: none;
 }
 .playarea {
     display: flex;
@@ -89,6 +86,9 @@ body {
     flex-direction: row;
     justify-content: space-between;
     align-items: baseline;
+}
+.panelheading h2 {
+    margin: 7px 0;
 }
 .elementlist {
     width: auto;
@@ -131,4 +131,12 @@ label {
 } */
 #comboFontFace {
     width: 200px;
+}
+#txtCommon {
+    outline: none;
+    width: 300px;
+    padding: 7px;
+}
+button:active {
+    background-color: #ccc;
 }

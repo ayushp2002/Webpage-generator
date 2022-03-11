@@ -13,47 +13,29 @@
     <script src="https://apis.google.com/js/api.js"></script>
     
     <script src="./fontapi.js"></script>
+    <script src="./eventhandlers.js"></script>
+    <script src="./utils.js"></script>
     <script src="./script.js"></script>
 
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="menubar">
-        <div class="menu" id="fileMenu">
-            <span class="menuTitle" id="fileMenuTitle">File</span>
-            <div class="menuItems" id="fileMenuItems">
-                <span class="menuItem" id="menuDownloadCode">Download code</span>
-            </div>
-        </div>
-        <div class="menu" id="editMenu">
-            <span class="menuTitle" id="editMenuTitle">Edit</span>
-            <div class="menuItems" id="editMenuItems">
-                <span class="menuItem" id="menuLockCodeEdit">Unlock Code Editing[inDev DO-NOT-USE]</span>
-            </div>
-        </div>
-        <div class="menu" id="codeMenu">
-            <span class="menuTitle" id="codeMenuTitle">Code</span>
-            <div class="menuItems" id="codeMenuItems">
-                <span class="menuItem" id="menuChangeId">Change ID</span>
-            </div>
-        </div>
+    <div class="tabbar">
+        <span class="tabTitle" id="tabfile">File</span>
+        <span class="tabTitle tabActive" id="tabhome">Home</span>
+        <span class="tabTitle" id="tabedit">Edit</span>
+        <span class="tabTitle" id="tabcode">Code</span>
     </div>
     <div class="toolbar">
-        <div class="toolbar-row toolbar-row1">
-            <button id="btnDeleteElement">Delete Selected Element</button>
+        <div class="toolbar-row" id="toolbarfile">
+            <button class="control" id="btnDownloadCode">Download code</button>
         </div>
-        <div class="toolbar-row toolbar-row2">
-            <input type="text" id="txtCommon" placeholder="Text">
-            <span class="controlSetTitle">
-                <button id="btnSetTitle">Set Title</button>
-            </span>
-            <span class="controlChangeText">
-                <button id="btnChangeText">Change Text</button>
-            </span>
-            <span class="controlAddP">
-                <button id="btnAddP">Add Paragraph</button>
-            </span>
-            <span class="controlAddH">
+        <div class="toolbar-row toolbarActive" id="toolbarhome">
+            <input type="text" class="control" id="txtCommon" placeholder="Text">
+            <button class="control" id="btnSetTitle">Set Title</button>
+            <button class="control" id="btnChangeText">Change Text</button>
+            <button class="control" id="btnAddP">Add Paragraph</button>
+            <span class="control controlAddH">
                 <select name="headingSize" id="comboHSize">
                     <option value="1">Heading 1</option>
                     <option value="2">Heading 2</option>
@@ -64,10 +46,10 @@
                 </select>
                 <button id="btnAddH">Add Heading</button>
             </span>
-            
+            <button class="control" id="btnDeleteElement">Delete Selected Element</button>
         </div>
-        <div class="toolbar-row toolbar-row3">
-            <span class="controlChangeFontSize">
+        <div class="toolbar-row" id="toolbaredit">
+            <span class="control controlChangeFontSize">
                 <!-- <input list="comboFontSize" id="txtFontSize" placeholder="Font Size"> -->
                 <!-- <datalist id="comboFontSize"> <!- Will be populated dynamically -> </datalist> -->
                 <!--https://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_datalist_options_length-->
@@ -82,16 +64,21 @@
                     <option value="rem">rem</option>
                 </select>
             </span>
-            <span class="controlFontColor">
+            <span class="control controlFontColor">
                 <label for="fontColor">Font Color</label>
                 <input type="color" name="fontColor" id="inputFontColor" style="vertical-align: middle;">
             </span>
-           <span class="controlChangeFontFace">
+           <span class="control controlChangeFontFace">
                 <label for="fontFace">Font Face</label>
                 <select name="fontFace" id="comboFontFace" style="width: 150px;"> <!-- Will be populated dynamically --> </select>
                 <select name="fontFaceWeight" id="comboFontFaceWeight" style="width: 100px;"> <!-- Will be populated dynamically --> </select>
                 <select name="fontFaceSort" id="comboFontFaceSort" style="width: 100px;"> <!-- Will be populated dynamically --> </select>
            </span>
+           <button class="control" id="btnItalic">Italic</button>
+           <button class="control" id="btnUnderline">Underline</button>
+        </div>
+        <div class="toolbar-row" id="toolbarcode">
+            <button class="control" id="btnLockCodeEdit">Unlock Code Editing[inDev DO-NOT-USE]</button>
         </div>
     </div>
 
@@ -120,7 +107,8 @@
 </body>
 <!-- 
     Custom context menus
-    tabs/menu bars on the top like ms word or mac menu bar
+    Replace font combo with datalist
+    DONE tabs/menu bars on the top like ms word or mac menu bar
     hide API key
  -->
 </html>
