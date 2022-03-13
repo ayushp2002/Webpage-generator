@@ -74,8 +74,14 @@
                 <select name="fontFaceWeight" id="comboFontFaceWeight" style="width: 100px;"> <!-- Will be populated dynamically --> </select>
                 <select name="fontFaceSort" id="comboFontFaceSort" style="width: 100px;"> <!-- Will be populated dynamically --> </select>
            </span>
-           <button class="control" id="btnItalic">Italic</button>
-           <button class="control" id="btnUnderline">Underline</button>
+           <span class="control controlFontStyle">
+                <button id="btnItalic">Italic</button>
+                <button id="btnUnderline">Underline</button>
+           </span>
+           <span class="control controlElementMove">
+                <button id="btnMoveUp">Move Up</button>
+                <button id="btnMoveDown">Move Down</button>
+           </span>
         </div>
         <div class="toolbar-row" id="toolbarcode">
             <button class="control" id="btnLockCodeEdit">Unlock Code Editing[inDev DO-NOT-USE]</button>

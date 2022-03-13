@@ -37,8 +37,8 @@ let usedFonts = [];
 /** Initialization */
 $(document).ready(function () {
     /* Split the screen in two verticals and 3 horizontals */
-    Split(['.elemlistcontainer', '.codetextcontainer', '.outputcontainer'], { gutterSize: 7, }).setSizes([20, 40, 40]);
-    Split(['.toolbar', '.playarea'], { direction: 'vertical', gutterSize: 7, }).setSizes([5, 95]);
+    Split(['.elemlistcontainer', '.codetextcontainer', '.outputcontainer'], { gutterSize: 9, }).setSizes([20, 40, 40]);
+    Split(['.toolbar', '.playarea'], { direction: 'vertical', gutterSize: 9, }).setSizes([5, 95]);
 
     iframedoc = getIframedocInstance();
 
@@ -106,6 +106,46 @@ $(document).ready(function () {
     });
     $("#btnUnderline").on("click", () => {
         toggleCssProp($("input[type='radio']:checked").val(), "text-decoration", "underline");
+    });
+    $("#btnMoveUp").on("click", function () {
+        let selectedElemID = $("input[type='radio']:checked").val();
+        let pos = body.indexOf(selectedElemID);
+        let startPos, endPos;
+        let string;
+        if (pos != -1) {
+            // for the selected string
+            for (startPos = pos; body[startPos] != '\n'; startPos--);
+            if (startPos > 0) {
+                for (endPos = pos; body[endPos] != '\n'; endPos++);
+                string = body.slice(startPos, endPos); // +1 to exclude the \n
+
+                body = body.replace(string, "");
+
+                // find the next string above the selected one
+                for (--startPos; body[startPos] != '\n'; startPos--); // startPos-1 because startPos='\n' currently
+                body = body.slice(0, startPos) + string + body.slice(startPos);
+                generateCode();
+            }
+        }
+    });
+    $("#btnMoveDown").on("click", function () {
+        let selectedElemID = $("input[type='radio']:checked").val();
+        let pos = body.indexOf(selectedElemID);
+        let startPos, endPos;
+        let string;
+        if (pos != -1) {
+            // for the selected string
+            for (startPos = pos; body[startPos] != '\n'; startPos--);
+            for (endPos = pos; body[endPos] != '\n'; endPos++);
+            if (endPos < body.length - 1) { // length always returns 1 extra
+                string = body.slice(startPos, endPos); // +1 to exclude the \n
+
+                body = body.replace(string, "");
+
+                body = body.slice(0, endPos) + string + body.slice(endPos);
+                generateCode();
+            }
+        }
     });
 });
 

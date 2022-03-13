@@ -29,6 +29,10 @@ function updateTypedCode() {
     body = $("#code").val().split('<body>\n').pop().split('\n</body>')[0];
     generateCode();
 }
+/**
+ * It returns the document object of the iframe.
+ * @returns The iframedoc object.
+ */
 function getIframedocInstance() {
     /** step 1: get the DOM object of the iframe. */
     let iframe = $('iframe#output').get(0);
@@ -97,6 +101,12 @@ function delRadiobtn(uid) {
     for (j = i + 1; list[j] != '\n'; j++);
     $(".elementlist").html(list.replace(list.slice(i, j), ''));
 }
+/**
+ * It adds a new property to the style of the selected element
+ * @param elemID - The ID of the element to which the property will be added.
+ * @param propertyName - The name of the CSS property to be added.
+ * @param propertyValue - The value of the property to be added.
+ */
 function addCssProp(elemID, propertyName, propertyValue) {
     if (elemID != undefined) {
         let elemPos = style.indexOf(elemID);
@@ -122,6 +132,11 @@ function addCssProp(elemID, propertyName, propertyValue) {
         alert(NO_SELECTED_ELEMENT_ERROR_TEXT);
     }
 }
+/**
+ * Given an element ID and a property name, remove the property from the element's style
+ * @param elemID - The ID of the element whose style property is to be removed.
+ * @param propertyName - The name of the CSS property to be removed.
+ */
 function removeCssProp(elemID, propertyName) {
     if (elemID != undefined) {
         let elemPos = style.indexOf(elemID);
@@ -143,6 +158,12 @@ function removeCssProp(elemID, propertyName) {
         generateCode();
     }
 }
+/**
+ * Toogle a given CSS property for an element
+ * @param elemID - The ID of the element you want to toggle.
+ * @param propertyName - The name of the CSS property to toggle.
+ * @param propertyValue - The value of the CSS property.
+ */
 function toggleCssProp(elemID, propertyName, propertyValue) {
     let elemPos = style.indexOf(elemID);
     if (elemPos != -1) {
@@ -155,6 +176,11 @@ function toggleCssProp(elemID, propertyName, propertyValue) {
         addCssProp(elemID, propertyName, propertyValue);
     }
 }
+/**
+ * Add a Gfont link to the head of the generated code
+ * @param fontName - The name of the font you want to add.
+ * @param [weight] - The weight of the font.
+ */
 function addFontLink(fontName, weight = "") {
     if ($("input[type='radio']:checked").val() != undefined) {
         fontName = fontName.replaceAll(' ', '+');
@@ -196,6 +222,11 @@ function addFontLink(fontName, weight = "") {
         }
     }
 }
+/**
+ * Load the Google Fonts API client, then call the client's webfonts.list method
+ * @param sort - The sort order of the returned list.
+ * @param callback - A function to be called after the API call.
+ */
 function loadGFonts(sort, callback) {
     // fonts = {};
     loadGFontsAPIClient()
@@ -207,6 +238,9 @@ function loadGFonts(sort, callback) {
                 }, function (err) { console.error("Execute error", err); });
         }).then(() => callback());
 }
+/**
+ * Fill the font face combo box with the font families
+ */
 function fillFontFaceCombo() {
     $("#comboFontFace").html("");
     fonts.forEach((font, index) => { // add font families
@@ -217,6 +251,9 @@ function fillFontFaceCombo() {
         );
     });
 }
+/**
+ * Fill the font weight combo box with the font weights for the selected font face
+ */
 function fillFontWeightCombo() {
     $("#comboFontFaceWeight").html("");
     fonts[$("#comboFontFace option:selected").index()].variants.forEach(variant => {  // add the corresponding font weights
@@ -229,6 +266,11 @@ function fillFontWeightCombo() {
         }
     });
 }
+/**
+ * Replace every word in a string with the same word, but with the first letter capitalized
+ * @param str - The string to be converted.
+ * @returns The string "The" is being returned.
+ */
 function toTitleCase(str) {
     return str.replace(/(?:^|\s)\w/g, function (match) {
         return match.toUpperCase();
@@ -244,6 +286,11 @@ const parse = (salt, encoded) => {
         .map((charCode) => String.fromCharCode(charCode))
         .join("");
 };
+/**
+ * It creates a link that downloads a file
+ * @param filename - the name of the file to download.
+ * @param text - The text to be downloaded.
+ */
 function download(filename, text) {
     var element = document.createElement('a');
     element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));

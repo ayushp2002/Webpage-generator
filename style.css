@@ -13,14 +13,14 @@ body {
 .gutter.gutter-horizontal {
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
     cursor: col-resize;
-    border-left: solid 1px #ccc;
-    border-right: solid 1px #ccc;
+    /* border-left: solid 1px #ccc;
+    border-right: solid 1px #ccc; */
 }
 .gutter.gutter-vertical {
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');
     cursor: row-resize;
-    border-top: solid 1px #ccc;
-    border-bottom: solid 1px #ccc;
+    /* border-top: solid 1px #ccc;
+    border-bottom: solid 1px #ccc; */
 }
 .tabbar {
     height: 35px;
@@ -46,6 +46,7 @@ body {
     flex-direction: column;
     justify-content: space-around;
     border: solid 7px #eee;
+    border-bottom: none;
 }
 .toolbarActive {
     display: flex !important;
@@ -74,6 +75,7 @@ body {
     display: flex;
     justify-content: space-around;
     border: solid 7px #eee;
+    border-top: none;
 }
 .playareapanel {
     display: flex;
